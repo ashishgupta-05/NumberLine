@@ -3,158 +3,185 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script>
-      //model
-      class NumberLineModel {
-        constructor(range, snappingRange, width, height) {
-          this.range = range;
-          this.snappingRange = snappingRange;
-          this.start = 100;
-          this.end = width - start;
-          this.pointY = height / 2;
-          this.pointX = this.mapValueToPixel(0);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+   
+    <script defer>
+        //model
+        class NumberLineModel {
+          constructor(range, snappingRange) {
+            this.range = range; 
+            this.snappingRange = snappingRange;
+            this.start = 100;
+            this.end = 700 // width - start;
+            this.pointY = 200;
+            this.pointX = this.mapValueToPixel(0);
+          }
+  
+          mapValueToPixel(value) {
+            return map(value, -this.range, this.range, this.start, this.end);
+          }
+  
+          mapPixelToValue(value) {
+            return map(value, this.start, this.end, -this.range, this.range);
+          }
+  
+          snapToNearest() {
+            const nearestValue = round(this.mapPixelToValue(this.pointX));
+            this.pointX = this.mapValueToPixel(nearestValue);
+            return nearestValue;
+          }
         }
-
-        mapValueToPixel(value) {
-          return map(value, -this.range, this.range, this.start, this.end);
+  
+  
+        //view
+        class NumberLineView{
+  
+          constructor(model){
+              this.model = model;
+          }
+  
+          drawNumberLine(){
+  
+              //straight line on X & Y co-ordinate
+              stroke(0);
+              strokeWeight(1);
+              line(this.model.start, this.model.pointY, this.model.end, this.model.pointY);
+  
+              //tick lines and number lable
+              for(let i= -this.model.range; i<=this.model.range; i++){
+                  const x = this.model.mapValueToPixel(i);
+                  line(x, this.model.pointY - 10, x, this.model.pointY + 10);
+                  fill(0);
+                  textAlign(CENTER, CENTER);
+                  text(i, x, this.model.pointY + 20);
+              }
+  
+          }
+  
+          drawPoint(){
+              fill(255, 0, 0);
+              noStroke();
+              ellipse(this.model.pointX, this.model.pointY, 15);
+          }
+  
+  
+          displayNearestValue(nearestValue){
+              fill(0);
+              textSize(16);
+              textAlign(CENTER, CENTER);
+              text(nearestValue, width/2, this.model.pointY - 40)
+          }
         }
-
-        mapPixelToValue(value) {
-          return map(value, this.start, this.end, -this.range, this.range);
+  
+  
+  
+        //controller
+  
+        class NumberLineController {
+  
+          constructor(model, view) {
+              this.model = model;
+              this.view = view;
+              this.dragged = false;
+          }
+  
+          handleMousePressed(mouseX, mouseY) {
+              const d = dist(mouseX, mouseY, this.model.pointX, this.model.pointY);
+              if(d < this.model.snappingRange){
+                  this.dragged = true;
+              }
+          }
+  
+          handleMouseDragged(mouseX){
+              if(this.dragged){
+                  this.model.pointX = constrain(mouseX, this.model.start, this.model.end);
+              }
+          }
+  
+          handleMouseReleased(){
+              this.dragged = false;
+          }
+  
+          //handle reset button to reset to 0
+          handleReset() {
+              this.model.pointX = this.model.mapValueToPixel(0);
+          }
+  
+          updateAndDraw(){
+              background(200);
+              this.view.drawNumberLine();
+              this.view.drawPoint();
+              const nearestValue = this.model.snapToNearest();
+              this.view.displayNearestValue(nearestValue);
+          }
         }
-
-        snapToNearest() {
-          const nearestValue = round(this.mapPixelToValue(this.pointX));
-          this.pointX = mapValueToPixel(nearestValue);
-          return nearestValue;
+  
+  
+  
+        //setup and draw canvas
+  
+        let model;
+        let view;
+        let controller;
+  
+        function setup(){
+          createCanvas(800, 400);
+          //Initialization & constructor call from the setup 
+          model = new NumberLineModel(10, 30, width, height);
+          view = new NumberLineView(model);
+          controller = new NumberLineController(model, view);
+  
+          //eventListener for reset button
+          const resetButton = document.getElementById("resetButton");
+          resetButton.addEventListener("click", () => 
+              controller.handleReset()
+          );
+  
         }
-      }
-
-
-      //view
-
-      class NumberLineview{
-
-        constructor(model){
-            this.model = model;
+  
+        function draw(){
+          controller.updateAndDraw();
         }
-
-        drawNumberLine(){
-
-            //straight line on X & Y co-ordinate
-            stroke(0);
-            strokeWeight(1);
-            line(this.model.start, this.model.pointY, this.model.end, this.model.pointY);
-
-            //tick lines and number lable
-            for(let i= -this.model.range; i<=this.model.range; i++){
-                const x = this.model.mapValueToPixel(i);
-                line(x, this.model.pointY - 10, x, this.model.pointY + 10);
-                fill(0);
-                textAlign(CENTER, CENTER);
-                text(i, x, this.model.pointY);
-            }
-
+  
+        function mousePressed(){
+          controller.handleMousePressed(mouseX, mouseY);
         }
-
-        drawPoint(){
-            fill(255, 0, 0);
-            noStroke();
-            ellipse(this.model.pointX, this.model.pointY);
+  
+        function mouseDragged(){
+          controller.handleMouseDragged(mouseX);
         }
-
-
-        nearestValue(nearestValue){
-            fill(0);
-            textAlign(CENTER, CENTER);
-            text(nearestValue, this.model.pointX/2, this.model.pointY - 40)
+  
+        function mouseReleased(){
+          controller.handleMouseReleased();
         }
-      }
-
-
-
-      //controller
-
-      class NumberLineController{
-
-        constructor(model, view){
-            this.model = model;
-            this.view = view;
-            this.dragged = false;
-        }
-
-        handleMousePressed(mouseX, mouseY){
-            let d = dist(mouseX, mouseY, this.model.pointX, this.model.pointY);
-            if(d < this.model.snappingRange){
-                this.dragged = true;
-            }
-        }
-
-        handleMouseDragged(mouseX){
-            if(this.dragged){
-                this.model.pointX = constrain(mouseX, this.model.start, this.model.end);
-            }
-        }
-
-        handleMouseReleased(){
-            this.dragged = true;
-        }
-
-        //handle reset button to reset to 0
-        handleReset(){
-            this.model.pointX = this.model.mapValueToPixel(0);
-        }
-
-        updateAndDraw(){
-            background(200);
-
-        }
-
-
-      }
-
-
-
-      //setup and draw canvas
-
-      let model;
-      let view;
-      let controller;
-
-      function setup(){
-        createCanvas(800, 200);
-        //Initialization & constructor call from the setup 
-        model = new NumberLineModel(10, 30, width, height);
-        view = new NumberLineview(model);
-        controller = new NumberLineController(model, view);
-
-        //eventListener for reset button
-        const resetButton = document.getElementById("resetButton");
-        resetButton.addEventListener("click", () => {
-            controller.handleReset();
-        });
-
-      }
-
-      function draw(){
-        controller.updateAndDraw();
-      }
-
-      function mousePressed(){
-        controller.handleMousePressed(mouseX, mouseY);
-      }
-
-      function mouseDragged(){
-        controller.handleMouseDragged(mouseX);
-      }
-
-      function mouseReleased(){
-        controller.handleMouseReleased();
-      }
-
-
-    </script>
-  </head>
+  
+  
+      </script>
+       <style>
+          body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+          }
+          button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          }
+          button:hover {
+            background-color: #0056b3;
+          }
+        </style>
+   </head>
   <body>
     <button id="resetButton">Reset to 0</button>
   </body>
