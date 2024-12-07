@@ -14,7 +14,10 @@ This project implements an interactive number line using **p5.js**. Users can dr
 
 ## Files
 - `index.html`: The main HTML file.
-- `sketch.js`: The JavaScript file containing the p5.js code.
+- `controller.js`: The controller file.
+- `view.js`: The MVC view file.
+- `model.js`: The MVC model file.
+- `MVC.html`: The HTML file containing the p5.js code.
 - `README.md`: Project documentation.
 
 ## Dependencies
@@ -25,4 +28,4 @@ This project implements an interactive number line using **p5.js**. Users can dr
 - Reset button styled for user convenience.
 
 ## Author
-Ashish
+Ashish Gupta
