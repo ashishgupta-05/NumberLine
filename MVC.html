@@ -35,16 +35,40 @@
 
       class NumberLineview{
 
+        constructor(model){
+            this.model = model;
+        }
+
+        drawNumberLine(){
+
+            //straight line on X & Y co-ordinate
+            stroke(0);
+            strokeWeight(1);
+            line(this.model.start, this.model.pointY, this.model.end, this.model.pointY);
+
+            //tick lines and number lable
+            for(let i= -this.model.range; i<=this.model.range; i++){
+                const x = this.model.mapValueToPixel(i);
+                line(x, this.model.pointY - 10, x, this.model.pointY + 10);
+                fill(0);
+                textAlign(CENTER, CENTER);
+                text(i, x, this.model.pointY);
+            }
+
+        }
+
+        drawPoint(){
+            fill(255, 0, 0);
+            noStroke();
+            ellipse(this.model.pointX, this.model.pointY);
+        }
 
 
-
-
-
-
-
-
-
-
+        nearestValue(nearestValue){
+            fill(0);
+            textAlign(CENTER, CENTER);
+            text(nearestValue, this.model.pointX/2, this.model.pointY - 40)
+        }
       }
 
 
@@ -67,13 +91,13 @@
         }
 
         handleMouseDragged(mouseX){
-            if(dragged){
+            if(this.dragged){
                 this.model.pointX = constrain(mouseX, this.model.start, this.model.end);
             }
         }
 
         handleMouseReleased(){
-            dragged = true;
+            this.dragged = true;
         }
 
         //handle reset button to reset to 0
@@ -83,7 +107,7 @@
 
         updateAndDraw(){
             background(200);
-            
+
         }
 
 
@@ -91,7 +115,7 @@
 
 
 
-      //setup and draw functions
+      //setup and draw canvas
 
       let model;
       let view;
