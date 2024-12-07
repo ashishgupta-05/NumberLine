@@ -66,12 +66,25 @@
             }
         }
 
-        
+        handleMouseDragged(mouseX){
+            if(dragged){
+                this.model.pointX = constrain(mouseX, this.model.start, this.model.end);
+            }
+        }
 
+        handleMouseReleased(){
+            dragged = true;
+        }
 
+        //handle reset button to reset to 0
+        handleReset(){
+            this.model.pointX = this.model.mapValueToPixel(0);
+        }
 
-
-
+        updateAndDraw(){
+            background(200);
+            
+        }
 
 
       }
