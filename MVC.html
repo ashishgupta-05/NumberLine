@@ -1,15 +1,124 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script>
+      //model
+      class NumberLineModel {
+        constructor(range, snappingRange, width, height) {
+          this.range = range;
+          this.snappingRange = snappingRange;
+          this.start = 100;
+          this.end = width - start;
+          this.pointY = height / 2;
+          this.pointX = this.mapValueToPixel(0);
+        }
+
+        mapValueToPixel(value) {
+          return map(value, -this.range, this.range, this.start, this.end);
+        }
+
+        mapPixelToValue(value) {
+          return map(value, this.start, this.end, -this.range, this.range);
+        }
+
+        snapToNearest() {
+          const nearestValue = round(this.mapPixelToValue(this.pointX));
+          this.pointX = mapValueToPixel(nearestValue);
+          return nearestValue;
+        }
+      }
+
+
+      //view
+
+      class NumberLineview{
+
+
+
+
+
+
+
+
+
+
+
+      }
+
+
+
+      //controller
+
+      class NumberLineController{
+
+        constructor(model, view){
+            this.model = model;
+            this.view = view;
+            this.dragged = false;
+        }
+
+        handleMousePressed(mouseX, mouseY){
+            let d = dist(mouseX, mouseY, this.model.pointX, this.model.pointY);
+            if(d < this.model.snappingRange){
+                this.dragged = true;
+            }
+        }
+
         
+
+
+
+
+
+
+
+      }
+
+
+
+      //setup and draw functions
+
+      let model;
+      let view;
+      let controller;
+
+      function setup(){
+        createCanvas(800, 200);
+        //Initialization & constructor call from the setup 
+        model = new NumberLineModel(10, 30, width, height);
+        view = new NumberLineview(model);
+        controller = new NumberLineController(model, view);
+
+        //eventListener for reset button
+        const resetButton = document.getElementById("resetButton");
+        resetButton.addEventListener("click", () => {
+            controller.handleReset();
+        });
+
+      }
+
+      function draw(){
+        controller.updateAndDraw();
+      }
+
+      function mousePressed(){
+        controller.handleMousePressed(mouseX, mouseY);
+      }
+
+      function mouseDragged(){
+        controller.handleMouseDragged(mouseX);
+      }
+
+      function mouseReleased(){
+        controller.handleMouseReleased();
+      }
+
+
     </script>
-</head>
-<body>
-    <button id="resetButton">
-        Reset to 0
-    </button>
-</body>
+  </head>
+  <body>
+    <button id="resetButton">Reset to 0</button>
+  </body>
 </html>
