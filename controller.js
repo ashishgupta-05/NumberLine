@@ -13,6 +13,13 @@
         if(d < this.model.snappingRange){
             this.dragged = true;
         }
+
+        for(let i = -this.model.range; i<= this.model.range; i++){
+            const clickNumber = this.model.mapValueToPixel(i);
+            const d = dist(mouseX, mouseY, clickNumber, this.model.pointY);
+            if(d < this.model.snappingRange)
+                this.model.pointX = clickNumber;
+        }
     }
 
     handleMouseDragged(mouseX){
@@ -34,6 +41,7 @@
         background(200);
         this.view.drawNumberLine();
         this.view.drawPoint();
+        this.view.drawArrow();
         const nearestValue = this.model.snapToNearest();
         this.view.displayNearestValue(nearestValue);
     }

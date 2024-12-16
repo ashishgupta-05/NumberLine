@@ -1,4 +1,5 @@
-  //model
+
+//model
   class NumberLineModel {
     constructor(range, snappingRange) {
       this.range = range; 
@@ -21,5 +22,6 @@
       const nearestValue = round(this.mapPixelToValue(this.pointX));
       this.pointX = this.mapValueToPixel(nearestValue);
       return nearestValue;
+    
     }
   }
