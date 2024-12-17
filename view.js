@@ -40,8 +40,15 @@ class NumberLineView {
         const subtractionPixel = this.model.mapValueToPixel(subtractionValue);
         const centerPixel = this.model.mapValueToPixel(centerValue);
 
-   
-    //draw addition line and arrow
+        //drawing checkBox
+        let checkBoxAdd = createCheckbox();
+        checkBoxAdd.position(this.model.start, this.model.pointY + 50);
+
+        let checkBoxSub = createCheckbox();
+        checkBoxSub.position(this.model.start, this.model.pointY + 150);
+
+
+        //draw addition line and arrow
 
         stroke(0, 200, 0);
         strokeWeight(2);
@@ -61,6 +68,20 @@ class NumberLineView {
 
         }
 
+        //dislying the addition 
+
+        //ADDITION
+        fill(221, 255, 221)
+        stroke(0);
+        rect(120, this.model.pointY + 70, 250, 80);
+
+        fill(0);
+        noStroke();
+        textSize(16);
+        textAlign(LEFT, CENTER);
+        text(`Addition : ${centerValue} + 6 = ${additionValue}`, 130, this.model.pointY + 110);
+
+
 
         //draw subtraction line and arrow
         stroke(200, 0, 0);
@@ -78,42 +99,36 @@ class NumberLineView {
 
         }
 
-
-
-        //dislying the addition and subtraction value
-
-        //ADDITION
-        fill(221, 255, 221)
-        stroke(0);
-        rect(100, this.model.pointY + 50, 250, 80);
-
-        fill(0);
-        noStroke();
-        textSize(16);
-        textAlign(LEFT, CENTER);
-        text(`Addition : ${centerValue} + 6 = ${additionValue}`, 120, this.model.pointY + 90);
-
-
+        //DISPLAY subtraction value
         //Subtraction
         fill(255, 221, 221)
         stroke(0)
-        rect(450, this.model.pointY + 50, 250, 80);
+        rect(120, this.model.pointY + 170, 250, 80);
 
         fill(0);
         noStroke();
         textSize(16);
         textAlign(LEFT, CENTER);
-        text(`Subtraction : ${centerValue} - 6 = ${subtractionValue}`, 470, this.model.pointY + 90);
+        text(`Subtraction : ${centerValue} - 6 = ${subtractionValue}`, 130, this.model.pointY + 210);
 
     }
 
 
 
     displayNearestValue(nearestValue) {
+
+        fill(0, 0, 255);
+        noStroke();
+        ellipse(map(this.model.pointX, this.model.start, this.model.end, width/2 + 100, this.model.end), this.model.pointY + 110, 15);
+        stroke(0, 0, 255);
+        strokeWeight(2);
+        line(width / 2 + 100, this.model.pointY + 110, this.model.end, this.model.pointY+110);
+
         fill(0);
+        noStroke();
         textSize(16);
         textAlign(CENTER, CENTER);
-        text(nearestValue, width / 2, this.model.pointY - 40)
+        text(`a = ${nearestValue}`, width / 2 + 200, this.model.pointY + 70);
         //console.log(nearestValue);
     }
 }

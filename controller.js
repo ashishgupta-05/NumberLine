@@ -14,6 +14,7 @@
             this.dragged = true;
         }
 
+        //on clicking the point
         for(let i = -this.model.range; i<= this.model.range; i++){
             const clickNumber = this.model.mapValueToPixel(i);
             const d = dist(mouseX, mouseY, clickNumber, this.model.pointY);
