@@ -41,15 +41,16 @@ class NumberLineView {
         const centerPixel = this.model.mapValueToPixel(centerValue);
 
         //drawing checkBox
+
         let checkBoxAdd = createCheckbox("Addition", true);
-        checkBoxAdd.position(0, this.model.pointY + 50);
+         checkBoxAdd.position(0, this.model.pointY +50);
+         checkBoxAdd.style("width", "150px");
 
         let checkBoxSub = createCheckbox("Subtraction", true);
         checkBoxSub.position(0, this.model.pointY + 150);
 
 
         //draw addition line and arrow
-        if (checkBoxAdd.checked()) {
             stroke(0, 200, 0);
             strokeWeight(2);
 
@@ -81,10 +82,10 @@ class NumberLineView {
             textAlign(LEFT, CENTER);
             text(`Addition : ${centerValue} + 6 = ${additionValue}`, 130, this.model.pointY + 110);
 
-        }
+        
 
         //draw subtraction line and arrow
-        if (checkBoxSub.checked()) {
+        
             stroke(200, 0, 0);
             strokeWeight(2);
             if (subtractionValue < -this.model.range) {
@@ -111,7 +112,7 @@ class NumberLineView {
             textSize(16);
             textAlign(LEFT, CENTER);
             text(`Subtraction : ${centerValue} - 6 = ${subtractionValue}`, 130, this.model.pointY + 210);
-        }
+        
 
     }
 
@@ -119,12 +120,24 @@ class NumberLineView {
 
     displayNearestValue(nearestValue) {
 
+        //Value of addition a
         fill(0, 0, 255);
         noStroke();
         ellipse(map(this.model.pointX, this.model.start, this.model.end, width / 2 + 100, this.model.end), this.model.pointY + 110, 15);
         stroke(0, 0, 255);
         strokeWeight(2);
         line(width / 2 + 100, this.model.pointY + 110, this.model.end, this.model.pointY + 110);
+
+         noFill();
+         stroke(0);
+         strokeWeight(1);
+         rect(this.model.end+5, this.model.pointY + 90, 20, 20);
+
+         fill(0);
+         noStroke();
+         textSize(16);
+         textAlign(CENTER, CENTER);
+         text(`${nearestValue}`, this.model.end+15, this.model.pointY + 100);
 
         fill(0);
         noStroke();
@@ -133,12 +146,25 @@ class NumberLineView {
         text(`a = ${nearestValue}`, width / 2 + 200, this.model.pointY + 70);
         //console.log(nearestValue);
 
+
+        //value of subtraction b
         fill(255, 0, 0);
         noStroke();
         ellipse(width / 2 + 200, this.model.pointY + 210, 15);
         stroke(255, 0, 0);
         strokeWeight(2);
         line(width / 2 + 100, this.model.pointY + 210, this.model.end, this.model.pointY + 210);
+
+        noFill();
+        stroke(0);
+        strokeWeight(1);
+        rect(this.model.end+5, this.model.pointY + 190, 20, 20);
+
+        fill(0);
+        noStroke();
+        textSize(16);
+        textAlign(CENTER, CENTER);
+        text(`${6}`, this.model.end+15, this.model.pointY + 200);
 
         fill(0);
         noStroke();
