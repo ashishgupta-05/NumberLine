@@ -41,75 +41,77 @@ class NumberLineView {
         const centerPixel = this.model.mapValueToPixel(centerValue);
 
         //drawing checkBox
-        let checkBoxAdd = createCheckbox();
-        checkBoxAdd.position(this.model.start, this.model.pointY + 50);
+        let checkBoxAdd = createCheckbox("Addition", true);
+        checkBoxAdd.position(0, this.model.pointY + 50);
 
-        let checkBoxSub = createCheckbox();
-        checkBoxSub.position(this.model.start, this.model.pointY + 150);
+        let checkBoxSub = createCheckbox("Subtraction", true);
+        checkBoxSub.position(0, this.model.pointY + 150);
 
 
         //draw addition line and arrow
+        if (checkBoxAdd.checked()) {
+            stroke(0, 200, 0);
+            strokeWeight(2);
 
-        stroke(0, 200, 0);
-        strokeWeight(2);
+            if (additionValue > this.model.range) {
+                line(centerPixel, this.model.pointY, this.model.end, this.model.pointY);
+                fill(0, 200, 0);
 
-        if (additionValue > this.model.range) {
-            line(centerPixel, this.model.pointY, this.model.end, this.model.pointY);
-            fill(0, 200, 0);
+                triangle(this.model.end, this.model.pointY, this.model.end - 10, this.model.pointY - 5, this.model.end - 10, this.model.pointY + 5);
 
-            triangle(this.model.end, this.model.pointY, this.model.end - 10, this.model.pointY - 5, this.model.end - 10, this.model.pointY + 5);
 
+            }
+            else {
+                line(this.model.pointX, this.model.pointY, additionPixel, this.model.pointY);
+                fill(0, 200, 0);
+                triangle(additionPixel, this.model.pointY, additionPixel - 10, this.model.pointY - 5, additionPixel - 10, this.model.pointY + 5);
+
+            }
+
+            //dislying the addition 
+
+            //ADDITION
+            fill(221, 255, 221)
+            stroke(0);
+            rect(120, this.model.pointY + 70, 250, 80);
+
+            fill(0);
+            noStroke();
+            textSize(16);
+            textAlign(LEFT, CENTER);
+            text(`Addition : ${centerValue} + 6 = ${additionValue}`, 130, this.model.pointY + 110);
 
         }
-        else {
-            line(this.model.pointX, this.model.pointY, additionPixel, this.model.pointY);
-            fill(0, 200, 0);
-            triangle(additionPixel, this.model.pointY, additionPixel - 10, this.model.pointY - 5, additionPixel - 10, this.model.pointY + 5);
-
-        }
-
-        //dislying the addition 
-
-        //ADDITION
-        fill(221, 255, 221)
-        stroke(0);
-        rect(120, this.model.pointY + 70, 250, 80);
-
-        fill(0);
-        noStroke();
-        textSize(16);
-        textAlign(LEFT, CENTER);
-        text(`Addition : ${centerValue} + 6 = ${additionValue}`, 130, this.model.pointY + 110);
-
-
 
         //draw subtraction line and arrow
-        stroke(200, 0, 0);
-        strokeWeight(2);
-        if (subtractionValue < -this.model.range) {
-            line(centerPixel, this.model.pointY, this.model.start, this.model.pointY);
-            fill(200, 0, 0);
-            triangle(this.model.start, this.model.pointY, this.model.start + 10, this.model.pointY + 5, this.model.start + 10, this.model.pointY - 5);
+        if (checkBoxSub.checked()) {
+            stroke(200, 0, 0);
+            strokeWeight(2);
+            if (subtractionValue < -this.model.range) {
+                line(centerPixel, this.model.pointY, this.model.start, this.model.pointY);
+                fill(200, 0, 0);
+                triangle(this.model.start, this.model.pointY, this.model.start + 10, this.model.pointY + 5, this.model.start + 10, this.model.pointY - 5);
 
+            }
+            else {
+                line(this.model.pointX, this.model.pointY, subtractionPixel, this.model.pointY);
+                fill(200, 0, 0);
+                triangle(subtractionPixel, this.model.pointY, subtractionPixel + 10, this.model.pointY + 5, subtractionPixel + 10, this.model.pointY - 5);
+
+            }
+
+            //DISPLAY subtraction value
+            //Subtraction
+            fill(255, 221, 221)
+            stroke(0)
+            rect(120, this.model.pointY + 170, 250, 80);
+
+            fill(0);
+            noStroke();
+            textSize(16);
+            textAlign(LEFT, CENTER);
+            text(`Subtraction : ${centerValue} - 6 = ${subtractionValue}`, 130, this.model.pointY + 210);
         }
-        else {
-            line(this.model.pointX, this.model.pointY, subtractionPixel, this.model.pointY);
-            fill(200, 0, 0);
-            triangle(subtractionPixel, this.model.pointY, subtractionPixel + 10, this.model.pointY + 5, subtractionPixel + 10, this.model.pointY - 5);
-
-        }
-
-        //DISPLAY subtraction value
-        //Subtraction
-        fill(255, 221, 221)
-        stroke(0)
-        rect(120, this.model.pointY + 170, 250, 80);
-
-        fill(0);
-        noStroke();
-        textSize(16);
-        textAlign(LEFT, CENTER);
-        text(`Subtraction : ${centerValue} - 6 = ${subtractionValue}`, 130, this.model.pointY + 210);
 
     }
 
@@ -119,10 +121,10 @@ class NumberLineView {
 
         fill(0, 0, 255);
         noStroke();
-        ellipse(map(this.model.pointX, this.model.start, this.model.end, width/2 + 100, this.model.end), this.model.pointY + 110, 15);
+        ellipse(map(this.model.pointX, this.model.start, this.model.end, width / 2 + 100, this.model.end), this.model.pointY + 110, 15);
         stroke(0, 0, 255);
         strokeWeight(2);
-        line(width / 2 + 100, this.model.pointY + 110, this.model.end, this.model.pointY+110);
+        line(width / 2 + 100, this.model.pointY + 110, this.model.end, this.model.pointY + 110);
 
         fill(0);
         noStroke();
@@ -130,5 +132,18 @@ class NumberLineView {
         textAlign(CENTER, CENTER);
         text(`a = ${nearestValue}`, width / 2 + 200, this.model.pointY + 70);
         //console.log(nearestValue);
+
+        fill(255, 0, 0);
+        noStroke();
+        ellipse(width / 2 + 200, this.model.pointY + 210, 15);
+        stroke(255, 0, 0);
+        strokeWeight(2);
+        line(width / 2 + 100, this.model.pointY + 210, this.model.end, this.model.pointY + 210);
+
+        fill(0);
+        noStroke();
+        textSize(16);
+        textAlign(CENTER, CENTER);
+        text(`b = ${6}`, width / 2 + 200, this.model.pointY + 170);
     }
 }
