@@ -13,6 +13,12 @@ class NumberLineView {
         strokeWeight(1);
         line(this.model.start, this.model.pointY, this.model.end, this.model.pointY);
 
+        //vertical line on x & y co-ordinate
+        stroke(0);
+        strokeWeight(1);
+        line(width/2, this.model.pointY, width/2, 0);
+        triangle(width/2, 0, width/2 - 5, 5, width/2+5, 5);
+
         //tick lines and number lable
         for (let i = -this.model.range; i <= this.model.range; i++) {
             const x = this.model.mapValueToPixel(i);
