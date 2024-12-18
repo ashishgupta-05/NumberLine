@@ -40,16 +40,9 @@ class NumberLineView {
         const subtractionPixel = this.model.mapValueToPixel(subtractionValue);
         const centerPixel = this.model.mapValueToPixel(centerValue);
 
-        //drawing checkBox
+       
 
-        let checkBoxAdd = createCheckbox("Addition", true);
-         checkBoxAdd.position(0, this.model.pointY +50);
-         checkBoxAdd.style("width", "150px");
-
-        let checkBoxSub = createCheckbox("Subtraction", true);
-        checkBoxSub.position(0, this.model.pointY + 150);
-
-
+        if(checkBoxAdd.checked()){
         //draw addition line and arrow
             stroke(0, 200, 0);
             strokeWeight(2);
@@ -68,7 +61,7 @@ class NumberLineView {
                 triangle(additionPixel, this.model.pointY, additionPixel - 10, this.model.pointY - 5, additionPixel - 10, this.model.pointY + 5);
 
             }
-
+        
             //dislying the addition 
 
             //ADDITION
@@ -82,10 +75,10 @@ class NumberLineView {
             textAlign(LEFT, CENTER);
             text(`Addition : ${centerValue} + 6 = ${additionValue}`, 130, this.model.pointY + 110);
 
-        
+        }
 
         //draw subtraction line and arrow
-        
+        if(checkBoxSub.checked()){
             stroke(200, 0, 0);
             strokeWeight(2);
             if (subtractionValue < -this.model.range) {
@@ -112,7 +105,7 @@ class NumberLineView {
             textSize(16);
             textAlign(LEFT, CENTER);
             text(`Subtraction : ${centerValue} - 6 = ${subtractionValue}`, 130, this.model.pointY + 210);
-        
+        }
 
     }
 
