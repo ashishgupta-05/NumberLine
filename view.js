@@ -4,6 +4,9 @@ class NumberLineView {
 
     constructor(model) {
         this.model = model;
+        this.pointX = this.model.pointX;
+        this.arrowX = this.model.pointX;
+        this.animationSpeed = 0.05;
     }
 
     drawNumberLine() {
@@ -31,9 +34,10 @@ class NumberLineView {
     }
 
     drawPoint() {
+        this.pointX = lerp(this.pointX, this.arrowX, this.animationSpeed)
         fill(255, 0, 0);
         noStroke();
-        ellipse(this.model.pointX, this.model.pointY, 15);
+        ellipse(this.pointX, this.model.pointY, 15);
     }
 
 
@@ -46,7 +50,8 @@ class NumberLineView {
         const subtractionPixel = this.model.mapValueToPixel(subtractionValue);
         const centerPixel = this.model.mapValueToPixel(centerValue);
 
-       
+       //for animating line
+       this.arrowX = lerp(this.arrowX, centerPixel, this.animationSpeed);
 
         if(checkBoxAdd.checked()){
         //draw addition line and arrow
@@ -54,7 +59,7 @@ class NumberLineView {
             strokeWeight(2);
 
             if (additionValue > this.model.range) {
-                line(centerPixel, this.model.pointY, this.model.end, this.model.pointY);
+                line(this.arrowX, this.model.pointY, this.model.end, this.model.pointY);
                 fill(0, 200, 0);
 
                 triangle(this.model.end, this.model.pointY, this.model.end - 10, this.model.pointY - 5, this.model.end - 10, this.model.pointY + 5);
@@ -62,7 +67,7 @@ class NumberLineView {
 
             }
             else {
-                line(this.model.pointX, this.model.pointY, additionPixel, this.model.pointY);
+                line(this.arrowX, this.model.pointY, additionPixel, this.model.pointY);
                 fill(0, 200, 0);
                 triangle(additionPixel, this.model.pointY, additionPixel - 10, this.model.pointY - 5, additionPixel - 10, this.model.pointY + 5);
 
@@ -88,13 +93,13 @@ class NumberLineView {
             stroke(200, 0, 0);
             strokeWeight(2);
             if (subtractionValue < -this.model.range) {
-                line(centerPixel, this.model.pointY, this.model.start, this.model.pointY);
+                line(this.arrowX, this.model.pointY, this.model.start, this.model.pointY);
                 fill(200, 0, 0);
                 triangle(this.model.start, this.model.pointY, this.model.start + 10, this.model.pointY + 5, this.model.start + 10, this.model.pointY - 5);
 
             }
             else {
-                line(this.model.pointX, this.model.pointY, subtractionPixel, this.model.pointY);
+                line(this.arrowX, this.model.pointY, subtractionPixel, this.model.pointY);
                 fill(200, 0, 0);
                 triangle(subtractionPixel, this.model.pointY, subtractionPixel + 10, this.model.pointY + 5, subtractionPixel + 10, this.model.pointY - 5);
 
