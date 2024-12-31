@@ -34,7 +34,7 @@ class NumberLineView {
     }
 
     drawPoint() {
-        this.pointX = lerp(this.pointX, this.arrowX, this.animationSpeed)
+        this.pointX = lerp(this.pointX, this.arrowX, 0.5);
         fill(255, 0, 0);
         noStroke();
         ellipse(this.pointX, this.model.pointY, 15);
