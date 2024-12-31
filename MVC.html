@@ -19,7 +19,7 @@
       let checkBoxSub;
 
       function setup() {
-        createCanvas(800, 600);
+        createCanvas(800, 500);
         
         //Initialization & constructor call from the setup
         model = new NumberLineModel(10, 30, width, height);
@@ -32,11 +32,11 @@
 
          //drawing checkBox
          checkBoxAdd = createCheckbox("Addition", true);
-         checkBoxAdd.position(390, 400);
+         checkBoxAdd.position(250, 380);
          
 
         checkBoxSub = createCheckbox("Subtraction", true);
-        checkBoxSub.position(390, 500);
+        checkBoxSub.position(250, 480);
       }
 
       function draw() {
