@@ -1,130 +1,62 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive Number Line</title>
+    <title>NumberLine</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
-
+    <script src="controller.js"></script>
+    <script src="view.js"></script>
+    <script src="model.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    
     <script defer>
-      let numberLineStart, numberLineEnd;
-      let pointX, pointY;
-      let snappingRange = 30;
-      let range = 10;
-      let dragged = false;
+      //setup and draw canvas
+
+      let model;
+      let view;
+      let controller;
+      let checkBoxAdd;
+      let checkBoxSub;
 
       function setup() {
-        createCanvas(800, 400);
-        numberLineStart = 100;
-        numberLineEnd = width - numberLineStart;
-        pointX = map(0, -range, range, numberLineStart, numberLineEnd);//pointX = 400
-        pointY = height / 2; //pointY = 200
+        createCanvas(800, 500);
+        
+        //Initialization & constructor call from the setup
+        model = new NumberLineModel(10, 30, width, height);
+        view = new NumberLineView(model);
+        controller = new NumberLineController(model, view);
 
-        // Reset button event listener
+        //eventListener for reset button
         const resetButton = document.getElementById("resetButton");
-        resetButton.addEventListener("click", () => {
-          pointX = map(0, -range, range, numberLineStart, numberLineEnd);
-          console.log(pointX);
-        });
+        resetButton.addEventListener("click", () => controller.handleReset());
+
+         //drawing checkBox
+         checkBoxAdd = createCheckbox("Addition", true);
+         checkBoxAdd.position(250, 380);
+         
+
+        checkBoxSub = createCheckbox("Subtraction", true);
+        checkBoxSub.position(250, 480);
       }
 
       function draw() {
-        background(200);
-        drawLine();
-        drawPoint();
-        snapNearest();
-      }
-
-      function drawLine() {
-        // Draw the number line
-        stroke(0);
-        strokeWeight(1);
-        line(numberLineStart, height / 2, numberLineEnd, height / 2);
-
-        // Draw ticks and labels
-        for (let i = -range; i <= range; i++) {
-          let x = map(i, -range, range, numberLineStart, numberLineEnd);
-          console.log(x); //x=100, 130, 160,..........700
-          line(x, height / 2 - 10, x, height / 2 + 10);
-          fill(0);
-          textAlign(CENTER, CENTER);
-          text(i, x, height / 2 + 20);
-        }
-      }
-
-      function drawPoint() {
-        // Draw draggable point
-        fill(255, 0, 0);
-        noStroke();
-        ellipse(pointX, pointY, 15);
-      }
-
-      function snapNearest() {
-        // Snap to the nearest integer
-        if (!dragged) {
-          let nearestValue = round(
-            map(pointX, numberLineStart, numberLineEnd, -range, range)
-          );
-          pointX = map(
-            nearestValue,
-            -range,
-            range,
-            numberLineStart,
-            numberLineEnd
-          );
-
-          // Display the integer value
-          fill(0);
-          textSize(16);
-          textAlign(CENTER, CENTER);
-          text(nearestValue, width / 2, height / 2 - 40);
-        }
+        controller.updateAndDraw();
       }
 
       function mousePressed() {
-        let d = dist(mouseX, mouseY, pointX, pointY);
-        if (d < snappingRange) {
-          dragged = true;
-        }
+        controller.handleMousePressed(mouseX, mouseY);
       }
 
       function mouseDragged() {
-        if (dragged) {
-          pointX = constrain(mouseX, numberLineStart, numberLineEnd);
-        }
+        controller.handleMouseDragged(mouseX);
       }
 
       function mouseReleased() {
-        dragged = false;
+        controller.handleMouseReleased();
       }
     </script>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f9f9f9;
-      }
-      button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-    </style>
   </head>
   <body>
-    <script src="sketch.js"></script>
     <button id="resetButton">Reset to 0</button>
   </body>
 </html>
